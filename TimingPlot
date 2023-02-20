@@ -1,0 +1,52 @@
+from Fitting import *
+import time
+import random
+import matplotlib.pyplot as plt
+
+def bubble_sort(L):
+    n = len(L) # no. of items in list 
+    for i in range(n): # for every item 
+        for j in range(n): # compare to every other item
+            if L[i] < L[j]: # if out of order: 
+                L[i], L[j] = L[j], L[i] # swap items
+            
+
+n_values = [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000] 
+
+t_values = []      # time elapsed
+
+# for each n in n_values, generate a list of n random integers for bubble sort
+for i in range(len(n_values)):
+	n = n_values[i]
+	L = [random.randint(0,n) for j in range(n)]
+
+	start_time = time.time() # start timing
+	bubble_sort(L)           # execute sort
+	end_time = time.time()   # stop timing
+    
+
+	t_values.append((end_time-start_time)*1000) # convert to ms and store the time elapsed
+
+#linear fit
+y_lin = fit_data(lin, n_values, t_values)[2] #get y_fit from fit-data with lin
+
+#quadratic fit
+y_quad = fit_data(quad, n_values, t_values)[2] #get y_fit from fit-data with quad
+
+
+# plot results
+plt.scatter(n_values, t_values, c='k', marker ='o', label = 'has_duplicates_1') 
+plt.plot(n_values,y_lin,'r-')
+plt.plot(n_values,y_quad,'b-')
+plt.xlim(1,1000)                                                   # Scale x-axis
+plt.ylim(1,100)                                                    # Scale y-axis                                                  # Scale x-axis                                                    # Scale y-axis
+plt.xlabel("array length (n)")
+plt.ylabel("sorting time (ms)")
+plt.legend(["raw data","lin","quad"])
+plt.title("Bubble Sort")
+plt.savefig('bestfit.png')
+
+
+
+
+
