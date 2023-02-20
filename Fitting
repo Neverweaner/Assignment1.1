@@ -1,0 +1,22 @@
+import math
+from scipy import optimize
+
+def const(x, c):  # const function
+    return c
+
+def lin(x, m, b):  # lin function
+    return (m*x) + b
+
+def quad(x, c2, c1, c0):  # quad function
+    return (c2*x)**2 + (c1*x) + c0
+
+def fit_data(func, xdata, ydata): # fit data based on function
+    params, params_cov = optimize.curve_fit(func, xdata, ydata)
+    y_fit = [func(x, *params) for x in xdata] # fits each y vlaue for each x value
+    N = len(ydata) #length of fitted data list
+    se_sum = sum([(ydata[i]-y_fit[i])**2 for i in range(N)]) #squared errors 
+    mse = se_sum/N #mean squared error 
+    rms = math.sqrt(mse) #rms is sqrt of mena mean squared error 
+    return params, rms, y_fit #return tuple with parameters of best fit
+                              #the root mean square error of that fit
+                              #a list containing the y-data of that fit 
